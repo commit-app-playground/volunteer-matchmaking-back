@@ -1,6 +1,4 @@
-const dotenv = require('dotenv');
-dotenv.config();
-
+import config from './config'
 import { ApolloServer } from 'apollo-server-express'
 import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core'
 import express from 'express'
@@ -27,9 +25,10 @@ async function listen(port: number) {
 }
 
 async function main() {
+    const port = parseInt(config.port!);
     try {
-        await listen(4000)
-        console.log('Server is ready at http://localhost:4000/graphql')
+        await listen(port)
+        console.log(`Server is ready at http://localhost:${port}/graphql`)
     } catch (err) {
         console.error('Error starting the node server', err)
     }

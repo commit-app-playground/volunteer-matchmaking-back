@@ -4,8 +4,6 @@ import config from '../../config'
 import mongoose from 'mongoose'
 import { User } from '../../db/connector'
 import jwt from 'jsonwebtoken'
-import dotenv from 'dotenv';
-dotenv.config();
 
 const createUser: MutationResolvers['createUser'] = async (parent, args) => {
     const { email, password, type }: CreateUserData = args.userData;
