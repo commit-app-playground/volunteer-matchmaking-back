@@ -99,6 +99,7 @@ $RECYCLE.BIN/
 
 # application environment config
 .env
+dist
 secrets/secrets.yml
 node_modules
 .devcontainer
