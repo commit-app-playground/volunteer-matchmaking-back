@@ -98,7 +98,5 @@ $RECYCLE.BIN/
 .circleci/config-compiled.yml
 
 # application environment config
-.env
 secrets/secrets.yml
 node_modules
-.devcontainer

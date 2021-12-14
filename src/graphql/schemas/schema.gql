@@ -1,0 +1,81 @@
+scalar Date
+
+enum UserType {
+    VOLUNTEER
+    ORGANIZATION
+}
+
+type User {
+    _id: ID!
+    email: String!
+    password: String!
+    type: UserType!
+    profile: Profile
+    createdAt: Date
+    updatedAt: Date
+}
+
+type Profile {
+    name: String!
+    description: String!
+    remoteOptions: Int
+    availableDays: [Int]
+    interestedCauses: [String]
+    skills: [String]
+    availableHoursPerWeek: Int
+
+}
+
+type Organization {
+    name: String!
+    description: String!
+    owner: User!
+    admins: [User]
+    createdAt: Date
+    updatedAt: Date
+}
+
+type Project {
+    name: String!
+    description: String!
+    organization: Organization!
+    owner: User!
+    remoteOptions: Int
+    causes: [String!]
+    startDate: Date!
+    endDate: Date
+    isRecurring: Boolean!
+    recurringDays: [Int]
+    requiredSkills: [String]
+    createdAt: Date
+    updatedAt: Date
+}
+
+type Auth {
+    userId: ID!
+    token: String!
+    expiration: Int!
+}
+
+input CreateUserData {
+    email: String!
+    password: String!
+    type: UserType!
+}
+
+input UpdateUserData {
+    email: String
+    password: String
+    type: UserType
+}
+
+type Query {
+    users: [User!]!
+    user(userId: ID!): User!
+    login(email: String!, password: String!): Auth!
+}
+
+type Mutation {
+    createUser(userData: CreateUserData!): Auth!
+    updateUser(userId: ID!, userData: UpdateUserData): User!
+}
