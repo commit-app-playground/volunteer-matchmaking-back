@@ -5,15 +5,20 @@ import express from 'express'
 import http from 'http'
 import resolvers from './graphql/resolvers';
 import typeDefs from './graphql/schemas';
+import depthLimit from 'graphql-depth-limit';
+import compression from "compression";
 
 async function listen(port: number) {
     const app = express()
+    app.use(compression());
+    
     const httpServer = http.createServer(app)
 
     const server = new ApolloServer({
         typeDefs,
         resolvers,
         plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+        validationRules: [depthLimit(7)],
     })
     await server.start()
 
