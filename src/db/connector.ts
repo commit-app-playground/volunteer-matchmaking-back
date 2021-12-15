@@ -3,6 +3,9 @@
 import config from '../config'
 import mongoose from 'mongoose';
 import user from '../models/user'
+import volunteerProfile from '../models/volunteerProfile'
+import project from '../models/project'
+import organization from '../models/organization'
 
 /**
  * Mongoose Connection
@@ -16,5 +19,8 @@ db.on('error', () => {
 });
 
 const User = mongoose.model('User', user);
+const VolunteerProfile = mongoose.model('VolunteerProfile', volunteerProfile)
+const Project = mongoose.model('Project', project)
+const Organization = mongoose.model('Organization', organization)
 
-export { User };
+export { User, VolunteerProfile, Project, Organization };

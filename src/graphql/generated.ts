@@ -15,11 +15,6 @@ export type Scalars = {
   Date: any;
 };
 
-export type AdditionalEntityFields = {
-  path?: InputMaybe<Scalars['String']>;
-  type?: InputMaybe<Scalars['String']>;
-};
-
 export type Auth = {
   __typename?: 'Auth';
   expiration: Scalars['Int'];
@@ -27,43 +22,169 @@ export type Auth = {
   userId: Scalars['ID'];
 };
 
-export type CreateUserData = {
+export type CreateOrganizationInput = {
+  description: Scalars['String'];
+  name: Scalars['String'];
+};
+
+export type CreateProjectInput = {
+  causes?: InputMaybe<Array<Scalars['String']>>;
+  description: Scalars['String'];
+  endDate?: InputMaybe<Scalars['Date']>;
+  isRecurring: Scalars['Boolean'];
+  name: Scalars['String'];
+  organizationId: Scalars['ID'];
+  recurringDays?: InputMaybe<Array<InputMaybe<DaysOfTheWeek>>>;
+  remoteOptions: RemoteOption;
+  requiredSkills?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  startDate: Scalars['Date'];
+};
+
+export type CreateUserInput = {
   email: Scalars['String'];
   password: Scalars['String'];
-  type: Scalars['String'];
+  type: UserType;
 };
+
+export type CreateVolunteerProfileInput = {
+  availableDays?: InputMaybe<Array<InputMaybe<DaysOfTheWeek>>>;
+  availableHoursPerWeek?: InputMaybe<Scalars['Int']>;
+  description: Scalars['String'];
+  interestedCauses?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  name: Scalars['String'];
+  remoteOptions: RemoteOption;
+  skills?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  userId: Scalars['ID'];
+};
+
+export enum DaysOfTheWeek {
+  Friday = 'FRIDAY',
+  Monday = 'MONDAY',
+  Saturday = 'SATURDAY',
+  Sunday = 'SUNDAY',
+  Thursday = 'THURSDAY',
+  Tuesday = 'TUESDAY',
+  Wednesday = 'WEDNESDAY'
+}
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createOrganization: Organization;
+  createProject: Project;
   createUser: Auth;
-  updateUser: User;
+  createVolunteerProfile: VolunteerProfile;
+  deleteOrganization: Scalars['Boolean'];
+  deleteProject: Scalars['Boolean'];
+  deleteUser: Scalars['Boolean'];
+  deleteVolunteerProfile: Scalars['Boolean'];
+  updateOrganization?: Maybe<Organization>;
+  updateProject?: Maybe<Project>;
+  updateUser?: Maybe<User>;
+  updateVolunteerProfile?: Maybe<VolunteerProfile>;
+};
+
+
+export type MutationCreateOrganizationArgs = {
+  orgInput: CreateOrganizationInput;
+};
+
+
+export type MutationCreateProjectArgs = {
+  projectInput: CreateProjectInput;
 };
 
 
 export type MutationCreateUserArgs = {
-  userData: CreateUserData;
+  userInput: CreateUserInput;
+};
+
+
+export type MutationCreateVolunteerProfileArgs = {
+  profileInput: CreateVolunteerProfileInput;
+};
+
+
+export type MutationDeleteOrganizationArgs = {
+  orgId: Scalars['ID'];
+};
+
+
+export type MutationDeleteProjectArgs = {
+  projectId: Scalars['ID'];
+};
+
+
+export type MutationDeleteUserArgs = {
+  userId: Scalars['ID'];
+};
+
+
+export type MutationDeleteVolunteerProfileArgs = {
+  profileId: Scalars['ID'];
+};
+
+
+export type MutationUpdateOrganizationArgs = {
+  orgId: Scalars['ID'];
+  orgInput: UpdateOrganizationInput;
+};
+
+
+export type MutationUpdateProjectArgs = {
+  projectId: Scalars['ID'];
+  projectInput: UpdateProjectInput;
 };
 
 
 export type MutationUpdateUserArgs = {
-  userData?: InputMaybe<UpdateUserData>;
   userId: Scalars['ID'];
+  userInput?: InputMaybe<UpdateUserInput>;
+};
+
+
+export type MutationUpdateVolunteerProfileArgs = {
+  profileId: Scalars['ID'];
+  profileInput: UpdateVolunteerProfileInput;
+};
+
+export type Organization = {
+  __typename?: 'Organization';
+  _id: Scalars['ID'];
+  createdAt?: Maybe<Scalars['Date']>;
+  description: Scalars['String'];
+  name: Scalars['String'];
+  updatedAt?: Maybe<Scalars['Date']>;
 };
 
 export type Project = {
   __typename?: 'Project';
+  _id: Scalars['ID'];
+  causes?: Maybe<Array<Scalars['String']>>;
   createdAt?: Maybe<Scalars['Date']>;
   description: Scalars['String'];
+  endDate?: Maybe<Scalars['Date']>;
+  isRecurring: Scalars['Boolean'];
   name: Scalars['String'];
-  remote: Scalars['Boolean'];
+  organization: Organization;
+  recurringDays?: Maybe<Array<Maybe<DaysOfTheWeek>>>;
+  remoteOptions: RemoteOption;
+  requiredSkills?: Maybe<Array<Maybe<Scalars['String']>>>;
+  startDate: Scalars['Date'];
   updatedAt?: Maybe<Scalars['Date']>;
 };
 
 export type Query = {
   __typename?: 'Query';
   login: Auth;
-  user: User;
-  users: Array<User>;
+  organization?: Maybe<Organization>;
+  organizations?: Maybe<Array<Organization>>;
+  project?: Maybe<Project>;
+  projectMatchForVolunteer?: Maybe<Array<Maybe<Project>>>;
+  projects?: Maybe<Array<Project>>;
+  user?: Maybe<User>;
+  users?: Maybe<Array<User>>;
+  volunteerProfile?: Maybe<VolunteerProfile>;
+  volunteerProfiles?: Maybe<Array<VolunteerProfile>>;
 };
 
 
@@ -73,14 +194,67 @@ export type QueryLoginArgs = {
 };
 
 
+export type QueryOrganizationArgs = {
+  organizationId: Scalars['ID'];
+};
+
+
+export type QueryProjectArgs = {
+  projectId: Scalars['ID'];
+};
+
+
+export type QueryProjectMatchForVolunteerArgs = {
+  profileId: Scalars['ID'];
+};
+
+
 export type QueryUserArgs = {
   userId: Scalars['ID'];
 };
 
-export type UpdateUserData = {
+
+export type QueryVolunteerProfileArgs = {
+  profileId: Scalars['ID'];
+};
+
+export enum RemoteOption {
+  Notremote = 'NOTREMOTE',
+  Opentoboth = 'OPENTOBOTH',
+  Remoteonly = 'REMOTEONLY'
+}
+
+export type UpdateOrganizationInput = {
+  description?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+};
+
+export type UpdateProjectInput = {
+  causes?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  description?: InputMaybe<Scalars['String']>;
+  endDate?: InputMaybe<Scalars['Date']>;
+  isRecurring?: InputMaybe<Scalars['Boolean']>;
+  name?: InputMaybe<Scalars['String']>;
+  recurringDays?: InputMaybe<Array<InputMaybe<DaysOfTheWeek>>>;
+  remoteOptions?: InputMaybe<RemoteOption>;
+  requiredSkills?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  startDate?: InputMaybe<Scalars['Date']>;
+};
+
+export type UpdateUserInput = {
   email?: InputMaybe<Scalars['String']>;
   password?: InputMaybe<Scalars['String']>;
-  type?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<UserType>;
+};
+
+export type UpdateVolunteerProfileInput = {
+  availableDays?: InputMaybe<Array<InputMaybe<DaysOfTheWeek>>>;
+  availableHoursPerWeek?: InputMaybe<Scalars['Int']>;
+  description?: InputMaybe<Scalars['String']>;
+  interestedCauses?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  name?: InputMaybe<Scalars['String']>;
+  remoteOptions?: InputMaybe<RemoteOption>;
+  skills?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 export type User = {
@@ -88,8 +262,26 @@ export type User = {
   _id: Scalars['ID'];
   createdAt?: Maybe<Scalars['Date']>;
   email: Scalars['String'];
-  password: Scalars['String'];
-  type: Scalars['String'];
+  type: UserType;
+  updatedAt?: Maybe<Scalars['Date']>;
+};
+
+export enum UserType {
+  Organization = 'ORGANIZATION',
+  Volunteer = 'VOLUNTEER'
+}
+
+export type VolunteerProfile = {
+  __typename?: 'VolunteerProfile';
+  _id: Scalars['ID'];
+  availableDays?: Maybe<Array<Maybe<DaysOfTheWeek>>>;
+  availableHoursPerWeek?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Date']>;
+  description: Scalars['String'];
+  interestedCauses?: Maybe<Array<Maybe<Scalars['String']>>>;
+  name: Scalars['String'];
+  remoteOptions: RemoteOption;
+  skills?: Maybe<Array<Maybe<Scalars['String']>>>;
   updatedAt?: Maybe<Scalars['Date']>;
 };
 
@@ -162,84 +354,54 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  AdditionalEntityFields: AdditionalEntityFields;
-  String: ResolverTypeWrapper<Scalars['String']>;
   Auth: ResolverTypeWrapper<Auth>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
-  ID: ResolverTypeWrapper<Scalars['ID']>;
-  CreateUserData: CreateUserData;
-  Date: ResolverTypeWrapper<Scalars['Date']>;
-  Mutation: ResolverTypeWrapper<{}>;
-  Project: ResolverTypeWrapper<Project>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  CreateOrganizationInput: CreateOrganizationInput;
+  CreateProjectInput: CreateProjectInput;
+  CreateUserInput: CreateUserInput;
+  CreateVolunteerProfileInput: CreateVolunteerProfileInput;
+  Date: ResolverTypeWrapper<Scalars['Date']>;
+  DaysOfTheWeek: DaysOfTheWeek;
+  ID: ResolverTypeWrapper<Scalars['ID']>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
+  Mutation: ResolverTypeWrapper<{}>;
+  Organization: ResolverTypeWrapper<Organization>;
+  Project: ResolverTypeWrapper<Project>;
   Query: ResolverTypeWrapper<{}>;
-  UpdateUserData: UpdateUserData;
+  RemoteOption: RemoteOption;
+  String: ResolverTypeWrapper<Scalars['String']>;
+  UpdateOrganizationInput: UpdateOrganizationInput;
+  UpdateProjectInput: UpdateProjectInput;
+  UpdateUserInput: UpdateUserInput;
+  UpdateVolunteerProfileInput: UpdateVolunteerProfileInput;
   User: ResolverTypeWrapper<User>;
+  UserType: UserType;
+  VolunteerProfile: ResolverTypeWrapper<VolunteerProfile>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  AdditionalEntityFields: AdditionalEntityFields;
-  String: Scalars['String'];
   Auth: Auth;
-  Int: Scalars['Int'];
-  ID: Scalars['ID'];
-  CreateUserData: CreateUserData;
-  Date: Scalars['Date'];
-  Mutation: {};
-  Project: Project;
   Boolean: Scalars['Boolean'];
+  CreateOrganizationInput: CreateOrganizationInput;
+  CreateProjectInput: CreateProjectInput;
+  CreateUserInput: CreateUserInput;
+  CreateVolunteerProfileInput: CreateVolunteerProfileInput;
+  Date: Scalars['Date'];
+  ID: Scalars['ID'];
+  Int: Scalars['Int'];
+  Mutation: {};
+  Organization: Organization;
+  Project: Project;
   Query: {};
-  UpdateUserData: UpdateUserData;
+  String: Scalars['String'];
+  UpdateOrganizationInput: UpdateOrganizationInput;
+  UpdateProjectInput: UpdateProjectInput;
+  UpdateUserInput: UpdateUserInput;
+  UpdateVolunteerProfileInput: UpdateVolunteerProfileInput;
   User: User;
+  VolunteerProfile: VolunteerProfile;
 };
-
-export type UnionDirectiveArgs = {
-  discriminatorField?: Maybe<Scalars['String']>;
-  additionalFields?: Maybe<Array<Maybe<AdditionalEntityFields>>>;
-};
-
-export type UnionDirectiveResolver<Result, Parent, ContextType = any, Args = UnionDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type AbstractEntityDirectiveArgs = {
-  discriminatorField: Scalars['String'];
-  additionalFields?: Maybe<Array<Maybe<AdditionalEntityFields>>>;
-};
-
-export type AbstractEntityDirectiveResolver<Result, Parent, ContextType = any, Args = AbstractEntityDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type EntityDirectiveArgs = {
-  embedded?: Maybe<Scalars['Boolean']>;
-  additionalFields?: Maybe<Array<Maybe<AdditionalEntityFields>>>;
-};
-
-export type EntityDirectiveResolver<Result, Parent, ContextType = any, Args = EntityDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type ColumnDirectiveArgs = {
-  overrideType?: Maybe<Scalars['String']>;
-};
-
-export type ColumnDirectiveResolver<Result, Parent, ContextType = any, Args = ColumnDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type IdDirectiveArgs = { };
-
-export type IdDirectiveResolver<Result, Parent, ContextType = any, Args = IdDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type LinkDirectiveArgs = {
-  overrideType?: Maybe<Scalars['String']>;
-};
-
-export type LinkDirectiveResolver<Result, Parent, ContextType = any, Args = LinkDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type EmbeddedDirectiveArgs = { };
-
-export type EmbeddedDirectiveResolver<Result, Parent, ContextType = any, Args = EmbeddedDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type MapDirectiveArgs = {
-  path: Scalars['String'];
-};
-
-export type MapDirectiveResolver<Result, Parent, ContextType = any, Args = MapDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type AuthResolvers<ContextType = any, ParentType extends ResolversParentTypes['Auth'] = ResolversParentTypes['Auth']> = {
   expiration?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -253,31 +415,78 @@ export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 }
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  createUser?: Resolver<ResolversTypes['Auth'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'userData'>>;
-  updateUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'userId'>>;
+  createOrganization?: Resolver<ResolversTypes['Organization'], ParentType, ContextType, RequireFields<MutationCreateOrganizationArgs, 'orgInput'>>;
+  createProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationCreateProjectArgs, 'projectInput'>>;
+  createUser?: Resolver<ResolversTypes['Auth'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'userInput'>>;
+  createVolunteerProfile?: Resolver<ResolversTypes['VolunteerProfile'], ParentType, ContextType, RequireFields<MutationCreateVolunteerProfileArgs, 'profileInput'>>;
+  deleteOrganization?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteOrganizationArgs, 'orgId'>>;
+  deleteProject?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteProjectArgs, 'projectId'>>;
+  deleteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'userId'>>;
+  deleteVolunteerProfile?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteVolunteerProfileArgs, 'profileId'>>;
+  updateOrganization?: Resolver<Maybe<ResolversTypes['Organization']>, ParentType, ContextType, RequireFields<MutationUpdateOrganizationArgs, 'orgId' | 'orgInput'>>;
+  updateProject?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<MutationUpdateProjectArgs, 'projectId' | 'projectInput'>>;
+  updateUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'userId'>>;
+  updateVolunteerProfile?: Resolver<Maybe<ResolversTypes['VolunteerProfile']>, ParentType, ContextType, RequireFields<MutationUpdateVolunteerProfileArgs, 'profileId' | 'profileInput'>>;
 };
 
-export type ProjectResolvers<ContextType = any, ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project']> = {
+export type OrganizationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Organization'] = ResolversParentTypes['Organization']> = {
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  remote?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ProjectResolvers<ContextType = any, ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project']> = {
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  causes?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  endDate?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  isRecurring?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  organization?: Resolver<ResolversTypes['Organization'], ParentType, ContextType>;
+  recurringDays?: Resolver<Maybe<Array<Maybe<ResolversTypes['DaysOfTheWeek']>>>, ParentType, ContextType>;
+  remoteOptions?: Resolver<ResolversTypes['RemoteOption'], ParentType, ContextType>;
+  requiredSkills?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  startDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   updatedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   login?: Resolver<ResolversTypes['Auth'], ParentType, ContextType, RequireFields<QueryLoginArgs, 'email' | 'password'>>;
-  user?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryUserArgs, 'userId'>>;
-  users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
+  organization?: Resolver<Maybe<ResolversTypes['Organization']>, ParentType, ContextType, RequireFields<QueryOrganizationArgs, 'organizationId'>>;
+  organizations?: Resolver<Maybe<Array<ResolversTypes['Organization']>>, ParentType, ContextType>;
+  project?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryProjectArgs, 'projectId'>>;
+  projectMatchForVolunteer?: Resolver<Maybe<Array<Maybe<ResolversTypes['Project']>>>, ParentType, ContextType, RequireFields<QueryProjectMatchForVolunteerArgs, 'profileId'>>;
+  projects?: Resolver<Maybe<Array<ResolversTypes['Project']>>, ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'userId'>>;
+  users?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType>;
+  volunteerProfile?: Resolver<Maybe<ResolversTypes['VolunteerProfile']>, ParentType, ContextType, RequireFields<QueryVolunteerProfileArgs, 'profileId'>>;
+  volunteerProfiles?: Resolver<Maybe<Array<ResolversTypes['VolunteerProfile']>>, ParentType, ContextType>;
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  password?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['UserType'], ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type VolunteerProfileResolvers<ContextType = any, ParentType extends ResolversParentTypes['VolunteerProfile'] = ResolversParentTypes['VolunteerProfile']> = {
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  availableDays?: Resolver<Maybe<Array<Maybe<ResolversTypes['DaysOfTheWeek']>>>, ParentType, ContextType>;
+  availableHoursPerWeek?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  interestedCauses?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  remoteOptions?: Resolver<ResolversTypes['RemoteOption'], ParentType, ContextType>;
+  skills?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   updatedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -286,20 +495,10 @@ export type Resolvers<ContextType = any> = {
   Auth?: AuthResolvers<ContextType>;
   Date?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
+  Organization?: OrganizationResolvers<ContextType>;
   Project?: ProjectResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
+  VolunteerProfile?: VolunteerProfileResolvers<ContextType>;
 };
 
-export type DirectiveResolvers<ContextType = any> = {
-  union?: UnionDirectiveResolver<any, any, ContextType>;
-  abstractEntity?: AbstractEntityDirectiveResolver<any, any, ContextType>;
-  entity?: EntityDirectiveResolver<any, any, ContextType>;
-  column?: ColumnDirectiveResolver<any, any, ContextType>;
-  id?: IdDirectiveResolver<any, any, ContextType>;
-  link?: LinkDirectiveResolver<any, any, ContextType>;
-  embedded?: EmbeddedDirectiveResolver<any, any, ContextType>;
-  map?: MapDirectiveResolver<any, any, ContextType>;
-};
-
-import { ObjectID } from 'mongodb';
