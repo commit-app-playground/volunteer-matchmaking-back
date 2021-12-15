@@ -1,11 +1,53 @@
 {
   "name": "volunteer-matchmaking-back",
+  "author": "Rui Ni",
+  "license": "ISC",
   "version": "1.0.0",
-  "description": "A simple http server: hello world",
-  "main": "app.js",
-  "scripts": {
-    "start": "node ."
+  "description": "Build a RESTful API with Node.js, Express, and Typescript",
+  "main": "./dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/commit-app-playground/volunteer-matchmaking-back.git"
   },
-  "author": "",
-  "license": "ISC"
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/commit-app-playground/volunteer-matchmaking-back/issues"
+  },
+  "homepage": "https://github.com/commit-app-playground/volunteer-matchmaking-back#readme",
+  "scripts": {
+    "watch": "nodemon --watch './**/*.{ts,graphql}' --exec 'node --experimental-specifier-resolution=node --loader ts-node/esm' src/index.ts",
+    "dev": "tsc-watch --onSuccess \"npm run watch\"",
+    "codegen": "graphql-codegen --config codegen.yml"
+  },
+  "dependencies": {
+    "apollo-server-core": "^3.5.0",
+    "apollo-server-express": "^3.5.0",
+    "compression": "^1.7.4",
+    "express": "^4.17.1",
+    "graphql-depth-limit": "^1.1.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^4.2.1",
+    "mongoose": "^6.1.1"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^2.3.0",
+    "@graphql-codegen/introspection": "2.1.0",
+    "@graphql-codegen/typescript": "^2.4.1",
+    "@graphql-codegen/typescript-document-nodes": "2.2.1",
+    "@graphql-codegen/typescript-mongodb": "2.2.1",
+    "@graphql-codegen/typescript-resolvers": "^2.4.2",
+    "@types/compression": "^1.7.2",
+    "@types/dotenv": "^8.2.0",
+    "@types/express": "^4.17.13",
+    "@types/graphql-depth-limit": "^1.1.3",
+    "@types/jsonwebtoken": "^8.5.6",
+    "@types/mongoose": "^5.11.97",
+    "@types/node": "^16.11.12",
+    "graphql": "^15.8.0",
+    "graphql-tools": "^8.2.0",
+    "nodemon": "^2.0.15",
+    "ts-node": "^10.4.0",
+    "tsc-watch": "^4.5.0",
+    "typescript": "^4.5.3"
+  }
 }

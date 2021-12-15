@@ -1,0 +1,35 @@
+version: "3"
+services:
+  nodeapp:
+    container_name: volunteer-matchmaking-back
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    ports:
+      - "4000:4000"
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+    environment:
+      WAIT_HOSTS: mongodb:27017
+    networks:
+      - node-backend-network
+  mongodb:
+    container_name: mongodb
+    image: mongo:5.0
+    volumes:
+      - ~/mongo:/data/db
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=volunteer-master
+      - MONGO_INITDB_ROOT_PASSWORD=de3VW8sHP2VvshGy
+      - MONGO_INITDB_DATABASE=volunteer-matchmaking
+    networks:
+      - node-backend-network
+networks:
+  node-backend-network:
+    driver: bridge
